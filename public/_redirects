@@ -1,0 +1,8 @@
+# Legacy URL redirects
+/home       /             301
+/players    /#players     301
+/about-us   /#about       301
+/management /#management  301
+
+# SPA routing - serve index.html for all routes (must be last)
+/*    /index.html   200
