@@ -1,8 +1,41 @@
+# Netlify Functions Configuration
 [build]
   command = "npm run build"
+  functions = "netlify/functions"
   publish = "dist"
 
+# Environment variables for local development
+[dev]
+  command = "npm run dev"
+  port = 8888
+  targetPort = 5173
+
+# Headers for security and CORS
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "https://afmg.co.uk"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Credentials = "true"
+
+# Redirects for SPA routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
+  status = 200
+  conditions = {Role = ["!api"]}
+
+# API redirects for legacy paths
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
   status = 200

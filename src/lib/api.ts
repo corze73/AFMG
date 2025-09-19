@@ -1,7 +1,7 @@
 import { PlayerData } from '../components/PlayerModal';
 
 // API Configuration
-const API_BASE_URL = (import.meta as any).env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/.netlify/functions';
 
 // Types
 export interface User {
@@ -160,25 +160,21 @@ class ApiClient {
 
   // Image upload method (will use Cloudinary)
   async uploadImage(file: File): Promise<string> {
-    const formData = new FormData();
-    formData.append('image', file);
+    // Convert file to base64
+    const fileData = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
 
     try {
-      const response = await fetch(`${this.baseUrl}/upload/image`, {
+      const response = await this.request<{ url: string; public_id: string }>('/upload', {
         method: 'POST',
-        headers: {
-          'Authorization': this.token ? `Bearer ${this.token}` : '',
-        },
-        body: formData,
+        body: JSON.stringify({ file: fileData }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Image upload failed');
-      }
-
-      return data.data.url;
+      return response.data.url;
     } catch (error) {
       console.error('Image upload error:', error);
       throw error;
