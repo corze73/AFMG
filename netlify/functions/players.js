@@ -60,21 +60,14 @@ export const handler = async (event, context) => {
           id,
           name,
           position,
-          academy_id,
-          date_of_birth,
-          physical_attributes,
-          technical_abilities,
-          tactical_awareness,
-          mental_strength,
-          overall_rating,
-          potential_rating,
-          market_value,
-          profile_image_url,
+          preferred_foot,
+          current_club,
+          image_url,
           bio,
           created_at,
           updated_at
         FROM players 
-        ORDER BY overall_rating DESC, name ASC
+        ORDER BY name ASC
       `);
 
       return {
@@ -95,16 +88,9 @@ export const handler = async (event, context) => {
           id,
           name,
           position,
-          academy_id,
-          date_of_birth,
-          physical_attributes,
-          technical_abilities,
-          tactical_awareness,
-          mental_strength,
-          overall_rating,
-          potential_rating,
-          market_value,
-          profile_image_url,
+          preferred_foot,
+          current_club,
+          image_url,
           bio,
           created_at,
           updated_at
@@ -138,26 +124,19 @@ export const handler = async (event, context) => {
       const {
         name,
         position,
-        academy_id,
-        date_of_birth,
-        physical_attributes,
-        technical_abilities,
-        tactical_awareness,
-        mental_strength,
-        overall_rating,
-        potential_rating,
-        market_value,
-        profile_image_url,
+        preferred_foot,
+        current_club,
+        image_url,
         bio
       } = JSON.parse(event.body);
 
-      if (!name || !position || !academy_id) {
+      if (!name || !position) {
         return {
           statusCode: 400,
           headers,
           body: JSON.stringify({
             success: false,
-            message: 'Name, position, and academy_id are required'
+            message: 'Name and position are required'
           })
         };
       }
@@ -166,32 +145,18 @@ export const handler = async (event, context) => {
         INSERT INTO players (
           name,
           position,
-          academy_id,
-          date_of_birth,
-          physical_attributes,
-          technical_abilities,
-          tactical_awareness,
-          mental_strength,
-          overall_rating,
-          potential_rating,
-          market_value,
-          profile_image_url,
+          preferred_foot,
+          current_club,
+          image_url,
           bio
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        ) VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *
       `, [
         name,
         position,
-        academy_id,
-        date_of_birth,
-        physical_attributes || {},
-        technical_abilities || {},
-        tactical_awareness || {},
-        mental_strength || {},
-        overall_rating,
-        potential_rating,
-        market_value,
-        profile_image_url,
+        preferred_foot,
+        current_club,
+        image_url,
         bio
       ]);
 
@@ -211,26 +176,19 @@ export const handler = async (event, context) => {
       const {
         name,
         position,
-        academy_id,
-        date_of_birth,
-        physical_attributes,
-        technical_abilities,
-        tactical_awareness,
-        mental_strength,
-        overall_rating,
-        potential_rating,
-        market_value,
-        profile_image_url,
+        preferred_foot,
+        current_club,
+        image_url,
         bio
       } = JSON.parse(event.body);
 
-      if (!name || !position || !academy_id) {
+      if (!name || !position) {
         return {
           statusCode: 400,
           headers,
           body: JSON.stringify({
             success: false,
-            message: 'Name, position, and academy_id are required'
+            message: 'Name and position are required'
           })
         };
       }
@@ -239,33 +197,19 @@ export const handler = async (event, context) => {
         UPDATE players SET
           name = $1,
           position = $2,
-          academy_id = $3,
-          date_of_birth = $4,
-          physical_attributes = $5,
-          technical_abilities = $6,
-          tactical_awareness = $7,
-          mental_strength = $8,
-          overall_rating = $9,
-          potential_rating = $10,
-          market_value = $11,
-          profile_image_url = $12,
-          bio = $13,
+          preferred_foot = $3,
+          current_club = $4,
+          image_url = $5,
+          bio = $6,
           updated_at = CURRENT_TIMESTAMP
-        WHERE id = $14
+        WHERE id = $7
         RETURNING *
       `, [
         name,
         position,
-        academy_id,
-        date_of_birth,
-        physical_attributes || {},
-        technical_abilities || {},
-        tactical_awareness || {},
-        mental_strength || {},
-        overall_rating,
-        potential_rating,
-        market_value,
-        profile_image_url,
+        preferred_foot,
+        current_club,
+        image_url,
         bio,
         playerId
       ]);
