@@ -39,7 +39,7 @@ exports.handler = async (event, context) => {
     // Debug nodemailer import
     console.log('nodemailer object:', typeof nodemailer, Object.keys(nodemailer || {}));
     
-    if (!nodemailer || !nodemailer.createTransporter) {
+    if (!nodemailer || !nodemailer.createTransport) {
       return {
         statusCode: 500,
         headers,
@@ -49,7 +49,7 @@ exports.handler = async (event, context) => {
           debug: {
             nodemailerType: typeof nodemailer,
             nodemailerKeys: Object.keys(nodemailer || {}),
-            hasCreateTransporter: !!(nodemailer && nodemailer.createTransporter)
+            hasCreateTransport: !!(nodemailer && nodemailer.createTransport)
           }
         })
       };
