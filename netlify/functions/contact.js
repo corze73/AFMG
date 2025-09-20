@@ -62,15 +62,16 @@ export const handler = async (event, context) => {
     const transporter = nodemailer.createTransporter({
       host: process.env.SMTP_HOST || 'smtp.ionos.co.uk',
       port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: process.env.SMTP_PORT === '465', // true for 465, false for other ports
+      secure: process.env.SMTP_PORT === '465', // true for SSL (465), false for STARTTLS (587)
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
-      // Additional options for Ionos
+      // Ionos STARTTLS settings for port 587
+      requireTLS: process.env.SMTP_PORT !== '465', // Force STARTTLS for port 587
       tls: {
-        rejectUnauthorized: false,
-        ciphers: 'SSLv3'
+        rejectUnauthorized: false, // Allow self-signed certificates
+        minVersion: 'TLSv1.2'
       },
       // Debug logging
       debug: true,
