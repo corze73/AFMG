@@ -77,7 +77,7 @@ exports.handler = async (event, context) => {
     }
 
     // Create transporter with Ionos-specific settings
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: process.env.SMTP_PORT === '465', // true for SSL (465), false for STARTTLS (587)
