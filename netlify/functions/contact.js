@@ -58,15 +58,23 @@ export const handler = async (event, context) => {
       };
     }
 
-    // Create transporter
+    // Create transporter with Ionos-specific settings
     const transporter = nodemailer.createTransporter({
-      host: process.env.SMTP_HOST,
+      host: process.env.SMTP_HOST || 'smtp.ionos.co.uk',
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: process.env.SMTP_PORT === '465', // true for 465, false for other ports
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
+      // Additional options for Ionos
+      tls: {
+        rejectUnauthorized: false,
+        ciphers: 'SSLv3'
+      },
+      // Debug logging
+      debug: true,
+      logger: true
     });
 
     // Email content
@@ -107,13 +115,20 @@ Reply directly to this email to respond to ${name} at ${email}
 
   } catch (error) {
     console.error('Email send error:', error);
+    console.error('Error details:', {
+      code: error.code,
+      command: error.command,
+      response: error.response,
+      responseCode: error.responseCode
+    });
     
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
         success: false,
-        message: 'Failed to send email. Please try again later.'
+        message: 'Failed to send email. Please try again later.',
+        error: process.env.NODE_ENV === 'development' ? error.message : undefined
       })
     };
   }
