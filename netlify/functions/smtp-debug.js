@@ -1,4 +1,21 @@
-const nodemailer = require('nodemailer');
+// Try different import methods for nodemailer
+let nodemailer;
+try {
+  nodemailer = require('nodemailer');
+} catch (e1) {
+  try {
+    // Try destructuring
+    const { createTransporter } = require('nodemailer');
+    nodemailer = { createTransporter };
+  } catch (e2) {
+    try {
+      // Try default import
+      nodemailer = require('nodemailer').default;
+    } catch (e3) {
+      console.error('All nodemailer import methods failed:', { e1: e1.message, e2: e2.message, e3: e3.message });
+    }
+  }
+}
 
 exports.handler = async (event, context) => {
   // CORS headers
@@ -19,6 +36,25 @@ exports.handler = async (event, context) => {
   }
 
   try {
+    // Debug nodemailer import
+    console.log('nodemailer object:', typeof nodemailer, Object.keys(nodemailer || {}));
+    
+    if (!nodemailer || !nodemailer.createTransporter) {
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          success: false,
+          message: 'Nodemailer import failed',
+          debug: {
+            nodemailerType: typeof nodemailer,
+            nodemailerKeys: Object.keys(nodemailer || {}),
+            hasCreateTransporter: !!(nodemailer && nodemailer.createTransporter)
+          }
+        })
+      };
+    }
+
     // Check environment variables
     const envCheck = {
       SMTP_HOST: process.env.SMTP_HOST || 'NOT SET',
