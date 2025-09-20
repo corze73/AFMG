@@ -81,7 +81,7 @@ export const handler = async (event, context) => {
     }
 
     // GET /players/:id
-    if (method === 'GET' && path.match(/^\/\d+$/)) {
+    if (method === 'GET' && path.match(/^\/[a-f0-9-]{36}$/i)) {
       const playerId = path.substring(1);
       const result = await query(`
         SELECT 
@@ -171,7 +171,7 @@ export const handler = async (event, context) => {
     }
 
     // PUT /players/:id
-    if (method === 'PUT' && path.match(/^\/\d+$/)) {
+    if (method === 'PUT' && path.match(/^\/[a-f0-9-]{36}$/i)) {
       const playerId = path.substring(1);
       const {
         name,
@@ -236,7 +236,7 @@ export const handler = async (event, context) => {
     }
 
     // DELETE /players/:id
-    if (method === 'DELETE' && path.match(/^\/\d+$/)) {
+    if (method === 'DELETE' && path.match(/^\/[a-f0-9-]{36}$/i)) {
       const playerId = path.substring(1);
       
       const result = await query('DELETE FROM players WHERE id = $1 RETURNING id', [playerId]);

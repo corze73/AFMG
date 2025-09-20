@@ -96,6 +96,20 @@ export const handler = async (event, context) => {
       };
     }
 
+    // POST /logout
+    if (method === 'POST' && path === '/logout') {
+      // For JWT-based auth, logout is handled client-side by removing the token
+      // But we can still return a success response
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          success: true,
+          message: 'Logged out successfully'
+        })
+      };
+    }
+
     // GET /me
     if (method === 'GET' && path === '/me') {
       const authHeader = event.headers.authorization;
