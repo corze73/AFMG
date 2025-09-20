@@ -19,41 +19,11 @@ export const handler = async (event, context) => {
     };
   }
 
-  // Verify JWT token
-  const authHeader = event.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) {
-    return {
-      statusCode: 401,
-      headers,
-      body: JSON.stringify({
-        success: false,
-        message: 'Access token required'
-      })
-    };
-  }
-
-  let userId;
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    userId = decoded.userId;
-  } catch (error) {
-    return {
-      statusCode: 403,
-      headers,
-      body: JSON.stringify({
-        success: false,
-        message: 'Invalid or expired token'
-      })
-    };
-  }
-
   try {
     const path = event.path.replace('/.netlify/functions/players', '');
     const method = event.httpMethod;
 
-    // GET /players
+    // GET /players - Allow public access
     if (method === 'GET' && path === '') {
       const result = await query(`
         SELECT 
@@ -76,6 +46,36 @@ export const handler = async (event, context) => {
         body: JSON.stringify({
           success: true,
           data: result.rows
+        })
+      };
+    }
+
+    // All other endpoints require authentication
+    const authHeader = event.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      return {
+        statusCode: 401,
+        headers,
+        body: JSON.stringify({
+          success: false,
+          message: 'Access token required'
+        })
+      };
+    }
+
+    let userId;
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      userId = decoded.userId;
+    } catch (error) {
+      return {
+        statusCode: 403,
+        headers,
+        body: JSON.stringify({
+          success: false,
+          message: 'Invalid or expired token'
         })
       };
     }
