@@ -1,4 +1,12 @@
-const nodemailer = require('nodemailer');
+// Use require syntax for Netlify Functions
+const nodemailer = (() => {
+  try {
+    return require('nodemailer');
+  } catch (e) {
+    // Fallback for ES modules
+    return import('nodemailer').then(m => m.default);
+  }
+})();
 
 exports.handler = async (event, context) => {
   // CORS headers

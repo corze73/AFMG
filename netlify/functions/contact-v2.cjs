@@ -1,6 +1,6 @@
+const nodemailer = require('nodemailer');
+
 exports.handler = async (event, context) => {
-  // Import nodemailer dynamically
-  const { default: nodemailer } = await import('nodemailer');
   
   // CORS headers
   const headers = {
