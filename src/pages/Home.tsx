@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, Users, Trophy, Target, ArrowRight, User } from 'lucide-react';
+import { Users, Trophy, Target, ArrowRight, User } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import apiClient from '../lib/api';
 import ContactForm from '../components/ContactForm';
