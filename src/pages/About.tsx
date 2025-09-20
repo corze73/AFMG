@@ -6,9 +6,11 @@ const About: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Hero Section */}
       <div className="text-center mb-16">
-        <div className="w-20 h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-full flex items-center justify-center mx-auto mb-6">
-          <Shield className="w-10 h-10 text-white" />
-        </div>
+        <img 
+          src="/Academy Badge.png" 
+          alt="Aspire Football Academy Logo" 
+          className="w-20 h-20 rounded-full mx-auto mb-6 border-4 border-yellow-400"
+        />
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
           About AFMG
         </h1>
