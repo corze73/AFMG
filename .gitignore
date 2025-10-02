@@ -23,3 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Security - Never commit these
+*.key
+*.pem
+*.p12
+.env.local
+.env.production
+.env.*.local

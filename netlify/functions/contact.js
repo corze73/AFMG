@@ -4,7 +4,7 @@ exports.handler = async (event, context) => {
   
   // CORS headers
   const headers = {
-    'Access-Control-Allow-Origin': 'https://afmg.co.uk',
+        'Access-Control-Allow-Origin': 'https://afmg.co.uk',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Credentials': 'true'
